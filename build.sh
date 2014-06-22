@@ -10,3 +10,4 @@
 gcc -O2 -Wall -o htu21dflib -DHTU21DFTEST htu21dflib.c
 gcc -O2 -Wall -c htu21dflib.c
 gcc -O2 -Wall htu21dflib.o -o dweetio dweetio.c
+gcc -O2 -Wall htu21dflib.o -o mqtt mqtt.c
