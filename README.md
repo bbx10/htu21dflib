@@ -11,24 +11,24 @@ Adafruit guide to configuring the Pi for i2c.
 
 https://learn.adafruit.com/using-the-bmp085-with-raspberry-pi/configuring-the-pi-for-i2c
 
-== Build it ==
+## Build it
 
 ./build.sh
 
-== Run test program ==
+## Run test program
 
 ./htu21dflib
 
 Sample output
 
-----
+```
 29.1 52.3
 29.1 52.3
 29.1 52.3
 29.1 52.3
-----
+```
 
-== Dweet your data ==
+## Dweet your data
 
 ./dweetio
 
