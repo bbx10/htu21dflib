@@ -1,7 +1,7 @@
 /*
 The MIT License (MIT)
 
-Copyright (c) 2014 bbx10
+Copyright (c) 2014 bbx10node@gmail.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,8 @@ SOFTWARE.
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <errno.h>
 #include <unistd.h>
 #include <sys/ioctl.h>
@@ -49,9 +51,29 @@ static uint8_t I2Caddr;
 
 static int calc_crc8(const uint8_t *buf, int len);
 
-int i2c_open(const char *i2cdevname)
+int i2c_open(const char *i2cdevname_caller)
 {
-    int i2cfd;  // i2c file descriptor
+    int i2cfd;      // i2c file descriptor
+    FILE *boardrev; // get raspberry pi board revision
+    const char *i2cdevname;
+
+    i2cdevname = i2cdevname_caller;
+    boardrev = fopen("/sys/module/bcm2708/parameters/boardrev", "r");
+    if (boardrev) {
+        char aLine[80];
+        if (fgets(aLine, sizeof(aLine), boardrev)) {
+            long board_revision;
+            // Older board revisions use i2c-0, newer use i2c-1
+            board_revision = strtol(aLine, NULL, 10);
+            if ((board_revision == 2) || (board_revision == 3)) {
+                i2cdevname = "/dev/i2c-0";
+            }
+            else {
+                i2cdevname = "/dev/i2c-1";
+            }
+        }
+        fclose(boardrev);
+    }
 
     if ((i2cdevname == NULL) || (*i2cdevname == '\0')) return -1;
 
