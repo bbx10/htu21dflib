@@ -246,10 +246,17 @@ int main(int argc, char *argv[])
     int i2cfd;  // i2c file descriptor
     int i;
     float temperature, humidity;
+    char *i2c_devname;
 
-    i2cfd = i2c_open(I2CDEV);
+    i2c_devname = I2CDEV;
+    if (argc > 1) {
+        i2c_devname = argv[1];
+    }
+
+    printf("opening %s\n", i2c_devname);
+    i2cfd = i2c_open(i2c_devname);
     if (i2cfd < 0) {
-        printf("i2c_open failed %d\n", i2cfd);
+        printf("i2c_open(%s) failed %d\n", i2c_devname, i2cfd);
         return -1;
     }
 
